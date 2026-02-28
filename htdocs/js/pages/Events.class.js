@@ -1746,10 +1746,17 @@ Page.Events = class Events extends Page.PageUtils {
 	prepRollback(idx) {
 		// prep rollback to specified revision
 		var item = this.revisions[idx];
+		CodeEditor.hide();
 		Dialog.hide();
 		
-		this.rollbackData = item.event;
-		Nav.go('Events?sub=edit&id=' + this.event.id + '&rollback=1');
+		if (item.event.workflow) {
+			$P('Workflows').rollbackData = item.event;
+			Nav.go('Workflows?sub=edit&id=' + this.event.id + '&rollback=1');
+		}
+		else {
+			this.rollbackData = item.event;
+			Nav.go('Events?sub=edit&id=' + this.event.id + '&rollback=1');
+		}
 	}
 	
 	go_history() {

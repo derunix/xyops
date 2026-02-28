@@ -378,6 +378,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		var item = this.revisions[idx];
 		var obj_key = this.revHistOpts.itemKey;
 		var obj = item[ obj_key ];
+		CodeEditor.hide();
 		Dialog.hide();
 		
 		this.rollbackData = obj;
