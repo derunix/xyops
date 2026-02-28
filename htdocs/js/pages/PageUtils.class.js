@@ -2572,6 +2572,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 						autocomplete: 'off',
 						spellcheck: 'false'
 					};
+					if (param.variant == 'number') text_args.step = 'any';
 					if (!param.variant || param.variant.match(/^(password|text|tel)$/)) {
 						// only show explorer icon for non-validating text variants
 						html += explore_start + self.getFormText(text_args) + explore_end;
@@ -4960,6 +4961,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 						autocomplete: 'off',
 						spellcheck: 'false'
 					};
+					if (param.variant == 'number') text_args.step = 'any';
 					if (!param.variant || param.variant.match(/^(password|text|tel)$/)) {
 						// only show explorer icon for non-validating text variants
 						html += explore_start + self.getFormText(text_args) + explore_end;
