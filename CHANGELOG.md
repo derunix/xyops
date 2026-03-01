@@ -1,5 +1,17 @@
 # xyOps Changelog
 
+## Version v1.0.14
+
+> February 28, 2026
+
+- [`4830ef2`](https://github.com/pixlcore/xyops/commit/4830ef2a38438bb5ae0d83f21899a6913236cd08): Version 1.0.14
+- [`a6ff328`](https://github.com/pixlcore/xyops/commit/a6ff3283ac0a50763f44d755ea7ee0d73183fc3b): Event/Plugin Params: Improve handling of omitted non-required values (especially number fields).
+- [`ec0da56`](https://github.com/pixlcore/xyops/commit/ec0da56afdc70cec5549072cb11930406365755b): UI Bug Fix: Allow number variant text fields to contain floats.
+- [`93089f2`](https://github.com/pixlcore/xyops/commit/93089f2463ea0d1eaaa4fb5327934c4e054f4497): Bug Fix: (Regression) Rollback button stopped working when we introduced nav blocking while dialogs are open.  Fixes #171.
+- [`0cd3e18`](https://github.com/pixlcore/xyops/commit/0cd3e18b56e146d032c767572a19f462572401c9): Network Robustness: Allow final job update to come in "late" (after job was completed), in case server dropped offline then came back later.
+- [`b36bf42`](https://github.com/pixlcore/xyops/commit/b36bf4219c5c3834f8c0384c815d7cf42395c75a): Job Tags & Ticket Updates: Properly generate job metadata log rows from APIs (was missing ID and sever props).
+- [`b7293b9`](https://github.com/pixlcore/xyops/commit/b7293b9142cfcc9a1fe8498526b51e1bd8d7750e): Keyboard Trigger UI: Tweak job launch notification text to include event title.
+
 ## Version v1.0.13
 
 > February 27, 2026
