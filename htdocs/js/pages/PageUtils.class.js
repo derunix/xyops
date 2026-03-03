@@ -5188,8 +5188,8 @@ Page.PageUtils = class PageUtils extends Page.Base {
 				nice_icon = '<i class="mdi mdi-gesture-tap-button"></i>';
 				nice_type = 'On-Demand';
 				alt_type = 'Keyboard';
-				nice_desc = '<i class="mdi mdi-keyboard-outline">&nbsp;</i><b>Keyboard:</b> ' + this.getNiceHotKeyListText(item.keys || []);
-				short_desc = this.getNiceHotKeyListText(item.keys || []);
+				nice_desc = '<i class="mdi mdi-keyboard-outline">&nbsp;</i><b>Keyboard:</b> ' + this.getShortHotKeyListText(item.keys || []);
+				short_desc = this.getShortHotKeyListText(item.keys || []);
 			break;
 			
 			case 'catchup':

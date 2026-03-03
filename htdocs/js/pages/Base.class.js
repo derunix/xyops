@@ -1665,11 +1665,11 @@ Page.Base = class Base extends Page {
 		return '<i class="mdi mdi-' + icon + '">&nbsp;</i>' + title;
 	}
 	
-	getNiceHotKeyListText(keys, glue = ', ') {
+	getShortHotKeyListText(keys, glue = ', ') {
 		// get text list of hot keys
 		var self = this;
 		if (!keys || !keys.length) return '';
-		return keys.map( function(key) { return KeySelect.getkeyLabel(key); } ).join(glue);
+		return keys.map( function(key) { return KeySelect.getShortKeyLabel(key); } ).join(glue);
 	}
 	
 	getNiceHotKeyList(keys, glue = ', ') {
@@ -1681,7 +1681,7 @@ Page.Base = class Base extends Page {
 	
 	getNiceHotKey(key) {
 		// get nice hot key for display
-		var label = KeySelect.getkeyLabel(key);
+		var label = KeySelect.getKeyLabel(key);
 		return `<span class="hot_key">${label}</span>`;
 	}
 	

@@ -600,7 +600,7 @@ Page.MySettings = class MySettings extends Page.Base {
 				id: 'fe_hot_keys',
 				title: 'Type new key combo:',
 				placeholder: '(None)',
-				options: values.map( function(key) { return { id: key, title: KeySelect.getkeyLabel(key) }; } ),
+				options: values.map( function(key) { return { id: key, title: KeySelect.getKeyLabel(key) }; } ),
 				values: values,
 				icon: 'keyboard-outline',
 				default_icon: 'keyboard-outline',

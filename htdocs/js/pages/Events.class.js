@@ -3190,7 +3190,7 @@ Page.Events = class Events extends Page.PageUtils {
 				id: 'fe_et_keyboard_keys',
 				title: 'Type new key combo:',
 				placeholder: '(None)',
-				options: (trigger.keys || []).map( function(key) { return { id: key, title: KeySelect.getkeyLabel(key) }; } ),
+				options: (trigger.keys || []).map( function(key) { return { id: key, title: KeySelect.getKeyLabel(key) }; } ),
 				values: trigger.keys || [],
 				icon: 'keyboard-outline',
 				default_icon: 'keyboard-outline',
