@@ -1374,7 +1374,7 @@ Page.Servers = class Servers extends Page.ServerUtils {
 		
 		var grid_args = {
 			resp: resp,
-			cols: ['Job ID', 'Event', 'Category', 'Server', 'State', 'Progress', 'Remaining', 'Actions'],
+			cols: ['Job ID', 'Event', 'Category', 'Server', 'State', 'Elapsed', 'Progress', 'Remaining', 'Actions'],
 			data_type: 'job',
 			offset: this.activeOffset,
 			limit: config.alt_items_per_page,
@@ -1392,7 +1392,7 @@ Page.Servers = class Servers extends Page.ServerUtils {
 				// self.getShortDateTime( job.started ),
 				'<div id="d_vs_jt_server_' + job.id + '">' + self.getNiceServer(job.server, true) + '</div>',
 				'<div id="d_vs_jt_state_' + job.id + '">' + self.getNiceJobState(job) + '</div>',
-				// '<div id="d_vs_jt_elapsed_' + job.id + '">' + self.getNiceJobElapsedTime(job, false) + '</div>',
+				'<div id="d_vs_jt_elapsed_' + job.id + '">' + self.getNiceJobElapsedTime(job, false) + '</div>',
 				'<div id="d_vs_jt_progress_' + job.id + '">' + self.getNiceJobProgressBar(job) + '</div>',
 				'<div id="d_vs_jt_remaining_' + job.id + '">' + self.getNiceJobRemainingTime(job, false) + '</div>',
 				
@@ -1850,7 +1850,7 @@ Page.Servers = class Servers extends Page.ServerUtils {
 			jobs.forEach( function(job) {
 				div.find('#d_vs_jt_state_' + job.id).html( self.getNiceJobState(job) );
 				div.find('#d_vs_jt_server_' + job.id).html( self.getNiceServer(job.server, true) );
-				// div.find('#d_vs_jt_elapsed_' + job.id).html( self.getNiceJobElapsedTime(job, false) );
+				div.find('#d_vs_jt_elapsed_' + job.id).html( self.getNiceJobElapsedTime(job, false) );
 				div.find('#d_vs_jt_remaining_' + job.id).html( self.getNiceJobRemainingTime(job, false) );
 				
 				// update progress bar without redrawing it (so animation doesn't jitter)
