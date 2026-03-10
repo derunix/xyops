@@ -168,6 +168,7 @@ Page.Events = class Events extends Page.PageUtils {
 								{ id: 'keyboard', title: "Keyboard", icon: 'keyboard-outline' },
 								{ id: 'startup', title: "Startup", icon: 'desktop-classic' },
 								{ id: 'catchup', title: "Catch-Up", icon: 'calendar-refresh-outline', group: "Modifiers" },
+								{ id: 'nth', title: "Every Nth", icon: 'transit-skip' },
 								{ id: 'range', title: "Range", icon: 'calendar-range-outline' },
 								{ id: 'blackout', title: "Blackout", icon: 'circle' },
 								{ id: 'delay', title: "Delay", icon: 'chat-sleep-outline' },
@@ -514,7 +515,7 @@ Page.Events = class Events extends Page.PageUtils {
 		
 		// trigger
 		if ('trigger' in args) {
-			// types: manual, schedule, interval, startup, single, plugin, catchup, range, blackout, delay, precision
+			// types: manual, schedule, interval, startup, single, plugin, catchup, nth, range, blackout, delay, precision
 			var types = {};
 			(item.triggers || []).filter( function(trigger) { return trigger.enabled; } ).forEach( function(trigger) { 
 				types[trigger.type || 'N/A'] = 1; 
@@ -3244,6 +3245,41 @@ Page.Events = class Events extends Page.PageUtils {
 			caption: 'Optionally adjust the internal clock for this event, to either repeat past jobs, or jump over a backlog.  Select a date/time in your local timezone (' + this.getUserTimezone() + ').  <button class="link" onClick="$P().resetTimeMachine()">Reset to Now</button>.'
 		});
 		
+		// every nth
+		html += this.getFormRow({
+			id: 'd_et_nth_desc',
+			label: 'Description:',
+			content: 'Every Nth is an optional schedule modifier that will skip over scheduled jobs based on a repeating pattern you specify, for e.g. every other, every 3rd, etc.  You set how many jobs to skip, and you can also reset the internal counter used to keep state (so you can control when the next job will run).'
+		});
+		html += this.getFormRow({
+			id: 'd_et_nth_every',
+			label: 'Run Every:',
+			content: this.getFormText({
+				id: 'fe_et_nth_every',
+				type: 'number',
+				spellcheck: 'false',
+				autocomplete: 'off',
+				step: 1,
+				min: 2,
+				value: trigger.every || 2
+			}),
+			caption: 'Select which scheduled jobs to run.  `2` means run every other job, `3` means run every 3rd job, `10` means run every 10th job, etc.'
+		});
+		html += this.getFormRow({
+			id: 'd_et_nth_counter',
+			label: 'Reset Counter:',
+			content: this.getFormText({
+				id: 'fe_et_nth_counter',
+				type: 'number',
+				spellcheck: 'false',
+				autocomplete: 'off',
+				step: 1,
+				min: 0,
+				value: ''
+			}),
+			caption: 'Optionally reset the internal counter for keeping track of the nth cadence.  Set to `1` to run the next scheduled job, `2` to skip one, etc.'
+		});
+		
 		// range
 		html += this.getFormRow({
 			id: 'd_et_range_desc',
@@ -3559,12 +3595,24 @@ Page.Events = class Events extends Page.PageUtils {
 				case 'catchup':
 					// time machine
 					if ($('#fe_et_time_machine').val()) {
-						self.event.update_state = {
-							cursor: self.parseDateTZ( $('#fe_et_time_machine').val(), self.getUserTimezone() )
-						};
+						if (!self.event.update_state) self.event.update_state = {};
+						self.event.update_state.cursor = self.parseDateTZ( $('#fe_et_time_machine').val(), self.getUserTimezone() );
 					}
 					if ((idx == -1) && trigger.enabled && find_object(self.event.triggers, { type: 'catchup', enabled: true })) {
 						return app.doError("Sorry, you can only have one catch-up trigger defined per event.");
+					}
+				break;
+				
+				case 'nth':
+					// every nth
+					trigger.every = parseInt( $('#fe_et_nth_every').val() ) || 0;
+					if (trigger.every < 2) return app.badField('#fe_et_nth_every', "Please enter a valid number to set the nth size.");
+					if ($('#fe_et_nth_counter').val().length) {
+						if (!self.event.update_state) self.event.update_state = {};
+						self.event.update_state.nth = parseInt( $('#fe_et_nth_counter').val() ) || 0;
+					}
+					if ((idx == -1) && trigger.enabled && find_object(self.event.triggers, { type: 'nth', enabled: true })) {
+						return app.doError("Sorry, you can only have one every-nth trigger defined per event.");
 					}
 				break;
 				
@@ -3765,6 +3813,13 @@ Page.Events = class Events extends Page.PageUtils {
 				case 'catchup':
 					$('#d_et_catchup_desc').show();
 					$('#d_et_time_machine').show();
+					new_btn_label = 'Add Modifier';
+				break;
+				
+				case 'nth':
+					$('#d_et_nth_desc').show();
+					$('#d_et_nth_every').show();
+					$('#d_et_nth_counter').show();
 					new_btn_label = 'Add Modifier';
 				break;
 				

@@ -9,7 +9,7 @@ This document explains how triggers work, how they combine, and details each tri
 ## Key Points
 
 - Each trigger is a small definition object with two core fields: `enabled` and `type`. Extra fields depend on the type.
-- An event may have multiple triggers. Some types produce launches (schedule, interval, single, plugin). Others augment or constrain scheduling (manual, catchup, range, blackout, delay, precision).
+- An event may have multiple triggers. Some types produce launches (schedule, interval, single). Others augment or constrain scheduling (manual, catchup, nth, range, blackout, delay, precision, plugin).
 - The scheduler runs on the conductor once per minute. For schedule/interval/plugin triggers, it computes matching minutes (and optional seconds) and launches jobs accordingly.
 - Timezones are supported for schedule/plugin triggers via a `timezone` field. Range/blackout/interval times are "absolute" and thus timezone-agnostic.
 
@@ -280,6 +280,24 @@ Example:
   "enabled": true
 }
 ```
+
+### Every Nth
+
+Every Nth is an optional schedule modifier that will skip over some scheduled jobs based on a repeating pattern you specify, e.g. "every other", "every 3rd", etc.  You specify how many jobs to skip, and you can also reset the internal counter used to keep state (so you can control when the next job runs).
+
+A good example use of this is if you want to schedule a job that runs at a specific time every N days, regardless of the weekday or day of the month.  For e.g. if you want to run a job every 14 days (exactly once every two weeks), you can just set the job to run daily and set the Nth to 14 (run every 14th job).  Alternatively, you can set the job to run every week on a specific weekday, but set the Nth to 2, which would have the same effect.
+
+Example:
+
+```json
+{
+  "type": "nth",
+  "enabled": "true",
+  "every": 2
+}
+```
+
+Note that manual runs and those invoked via API skip over this modifier, as it only governs scheduled jobs.
 
 ### Range
 

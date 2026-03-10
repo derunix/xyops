@@ -1143,6 +1143,7 @@
 		{ "id": "keyboard", "title": "Keyboard", "icon": "keyboard-outline" },
 		{ "id": "startup", "title": "Startup", "icon": "desktop-classic" },
 		{ "id": "catchup", "title": "Catch-Up", "icon": "calendar-refresh-outline", "group": "Modifiers" },
+		{ "id": "nth", "title": "Every Nth", "icon": "transit-skip" },
 		{ "id": "range", "title": "Range", "icon": "calendar-range-outline" },
 		{ "id": "blackout", "title": "Blackout", "icon": "circle" },
 		{ "id": "delay", "title": "Delay", "icon": "chat-sleep-outline" },

@@ -3999,7 +3999,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		if (!trigger.enabled) short_desc = '(Disabled)';
 		if (trigger.type.match(/^(interval|single|startup|keyboard)$/)) nice_title = alt_type;
 		
-		if (trigger.type.match(/^(catchup|range|blackout|delay|precision|quiet|plugin)$/)) {
+		if (trigger.type.match(/^(catchup|nth|range|blackout|delay|precision|quiet|plugin)$/)) {
 			// option triggers are rendered as pure circles with no pole
 			nice_title = alt_type;
 			inner_classes.push('wf_option');
@@ -5206,6 +5206,13 @@ Page.PageUtils = class PageUtils extends Page.Base {
 				nice_type = alt_type = 'Modifier';
 				nice_desc = '<i class="mdi mdi-calendar-refresh-outline">&nbsp;</i>Catch-Up';
 				short_desc = "Catch-Up";
+			break;
+			
+			case 'nth':
+				nice_icon = '<i class="mdi mdi-cog-outline"></i>';
+				nice_type = alt_type = 'Modifier';
+				nice_desc = '<i class="mdi mdi-transit-skip">&nbsp;</i>Run Every ' + format_ordinal(item.every);
+				short_desc = "Every " + format_ordinal(item.every);
 			break;
 			
 			case 'range':

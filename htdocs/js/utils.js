@@ -47,6 +47,21 @@ function get_pretty_str_list(arr) {
 	return arr.slice(0, arr.length - 1).join(', ') + ' and ' + arr[ arr.length - 1 ];
 }
 
+function format_ordinal(num) {
+	// keep English ordinal suffixes, but localize digits
+	var date_opts = app.getDateOptions();
+	var num_fmt = new Intl.NumberFormat(date_opts.locale, { useGrouping: false, numberingSystem: date_opts.numberingSystem });
+	var suffix = 'th';
+	if ((num % 100 < 11) || (num % 100 > 13)) {
+		switch (num % 10) {
+			case 1: suffix = 'st'; break;
+			case 2: suffix = 'nd'; break;
+			case 3: suffix = 'rd'; break;
+		}
+	}
+	return num_fmt.format(num) + suffix;
+};
+
 function summarize_event_timings(event) {
 	// summarize all event triggers from event into human-readable string
 	// separate schedule items and options
@@ -63,6 +78,9 @@ function summarize_event_timings(event) {
 	triggers.forEach( function(trigger) {
 		switch (trigger.type) {
 			case 'catchup': opts.push("Catch-Up"); break;
+			case 'nth': 
+				if (trigger.every > 1) opts.push("Every " + format_ordinal(trigger.every)); 
+			break;
 			case 'range': opts.push("Date Range"); break;
 			case 'blackout': opts.push("Blackout"); break;
 			case 'delay': opts.push("Delay"); break;
@@ -118,7 +136,7 @@ function summarize_event_timing(trigger, idx) {
 	function format_number(num, min_digits) {
 		return (min_digits ? num2_fmt : num_fmt).format(num);
 	}
-	function format_ordinal(num) {
+	function format_ord(num) {
 		// keep English ordinal suffixes, but localize digits
 		var suffix = 'th';
 		if ((num % 100 < 11) || (num % 100 > 13)) {
@@ -153,9 +171,9 @@ function summarize_event_timing(trigger, idx) {
 	function format_month_day(num) {
 		if (num < 0) {
 			if (num == -1) return 'last day';
-			return format_ordinal(Math.abs(num)) + ' last day';
+			return format_ord(Math.abs(num)) + ' last day';
 		}
-		return format_ordinal(num);
+		return format_ord(num);
 	}
 	function format_minute_label(num) {
 		if (num == 0) return 'hour';

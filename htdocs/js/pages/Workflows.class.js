@@ -1992,7 +1992,7 @@ Page.Workflows = class Workflows extends Page.Events {
 			// compute x/y for new node
 			if (this.wfPausedSolder) {
 				// resume paused solder
-				if (trigger.type.match(/^(catchup|range|blackout|delay|precision|quiet|plugin)$/)) {
+				if (trigger.type.match(/^(catchup|nth|range|blackout|delay|precision|quiet|plugin)$/)) {
 					// special trigger type has no solder poles, so abort the solder, but place the node in the correct location
 					var solder = this.wfPausedSolder;
 					delete this.wfPausedSolder;

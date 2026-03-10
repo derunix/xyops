@@ -2025,9 +2025,10 @@ Page.Base = class Base extends Page {
 			event.schedules = schedules;
 			event.ranges = triggers.filter( function(trigger) { return (trigger.type == 'range') || (trigger.type == 'blackout'); } );
 			event.plugin_trigger = find_object( triggers, { type: 'plugin', enabled: true } );
+			event.nth_trigger = find_object( triggers, { type: 'nth', enabled: true } );
 			event.day_limits = find_objects( event.limits || [], { type: 'day', enabled: true } ) || [];
 			
-			// add deep copies of event stats and state, so we can manip them
+			// add deep copies of event stats and state, so we can simulate mutations
 			event.stats = deep_copy_object( get_path( app.stats.currentDay, 'events.' + event.id ) || {} );
 			event.state = deep_copy_object( get_path( app.state, 'events.' + event.id ) || {} );
 			
@@ -2148,6 +2149,16 @@ Page.Base = class Base extends Page {
 					var count = event.stats[ 'job_' + limit.condition ] || 0;
 					if (limit.amount && (count >= limit.amount)) scheduled = false;
 				} );
+				
+				if (!scheduled) return;
+				
+				// check every nth
+				if (event.nth_trigger) {
+					var nth_counter = (event.state.nth || 0) - 1;
+					if (nth_counter <= 0) nth_counter = event.nth_trigger.every;
+					else scheduled = false;
+					event.state.nth = nth_counter;
+				}
 				
 				if (!scheduled) return;
 				

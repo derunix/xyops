@@ -64,7 +64,7 @@ Triggers define when jobs are allowed to launch, and optional modifiers. Common 
 - `interval`: Run every N minutes; mutually exclusive with precision/delay.
 - `single`: One-time run at a specific date/time.
 - `plugin`: Scheduler Plugin decides when to run; useful for external signals.
-- Modifiers: `catchup`, `range`, `blackout`, `delay`, `precision` provide windowing, lockouts, and sub-minute behavior.
+- Modifiers: `catchup`, `nth`, `range`, `blackout`, `delay`, `precision` provide windowing, lockouts, and sub-minute behavior.
 
 See the full trigger list and composition rules: [Triggers](triggers.md).
 

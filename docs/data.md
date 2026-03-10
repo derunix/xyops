@@ -2956,6 +2956,7 @@ Each trigger has a `type` property which describes its behavior.  The different 
 | `interval` | **Interval** | Run the event on a repeating interval, given a starting date/time.  See [Intervals](#intervals) below. |
 | `single` | **Single Shot** | Set a single future exact date/time to run.  Requires an additional `epoch` property, set to the [Unix timestamp](https://en.wikipedia.org/wiki/Unix_time) at which to run. |
 | `catchup` | **Catch-Up** | Ensure that *every* scheduled job runs, even if it has to run late. |
+| `nth` | **Every Nth** | Run only every Nth scheduled job.  See [Every Nth](triggers.md#every-nth) for details. |
 | `range` | **Range** | Set a starting and/or ending date for a repeating event.  Requires additional `start` and/or `end` properties, set to [Unix timestamps](https://en.wikipedia.org/wiki/Unix_time). |
 | `blackout` | **Blackout** | Set a blackout date/time range when the event *cannot* run.  Requires additional `start` and `end` properties, set to [Unix timestamps](https://en.wikipedia.org/wiki/Unix_time). |
 | `delay` | **Delay** | Set an optional starting delay for all scheduled jobs.  Requires an additional `duration` property, set to the number of seconds to delay each job by. |
