@@ -1,5 +1,18 @@
 # xyOps Changelog
 
+## Version v1.0.21
+
+> March 9, 2026
+
+- [`41ef84a`](https://github.com/pixlcore/xyops/commit/41ef84a7b9cd358c423da827c7e9fc038d0ca43a): Version 1.0.21
+- [`9df1183`](https://github.com/pixlcore/xyops/commit/9df1183a0dcfe89833032b62e3db045584e412f2): Feature: New schedule modifier trigger: "Every Nth": Skip over every Nth job run (for things like bi-weekly events).
+- [`e266594`](https://github.com/pixlcore/xyops/commit/e266594e0ba4d3ae2aa8eb6ebd52723fec271427): Upcoming Job Prediction: Correctly simulate day limits.
+- [`079b9c7`](https://github.com/pixlcore/xyops/commit/079b9c72b1fd613f1ba12f7b65374cd0c12f2848): Internal: Shorten float for `total_elapsed` inside event state data, to reduce overall JSON size.
+- [`20589ae`](https://github.com/pixlcore/xyops/commit/20589aeb1cdaccecb32e6cf71014c86edbe89de1): System UI: Show versions of xyOps / xySat in the upgrade dialogs.
+- [`fe176e2`](https://github.com/pixlcore/xyops/commit/fe176e255a7aa453392a74c26ab835c5a5e1cf27): Multi-Server: Automatically detect primary conductor hostname (Host ID) changes, and adjust masters.json file as needed.
+- [`0756051`](https://github.com/pixlcore/xyops/commit/0756051bc16991bf446d996ebf570031ae21ab67): Jobs: Allow jobs to be aborted if stuck in "finishing" state.
+- [`15be10d`](https://github.com/pixlcore/xyops/commit/15be10d28b2b9f6494c7f72340aa4037605508c0): Tickets: Add author (full name) to emails, and fix tag icons.
+
 ## Version v1.0.20
 
 > March 7, 2026
