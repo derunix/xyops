@@ -30,5 +30,9 @@ PIDFILE=$HOMEDIR/logs/xyops.pid
 # delete old pid file
 rm -f $PIDFILE
 
+# set perms on config files
+[[ -f conf/config.json ]] && chmod 600 conf/config.json
+[[ -f conf/overrides.json ]] && chmod 600 conf/overrides.json
+
 # start xyops, replace current process
 exec $BINARY

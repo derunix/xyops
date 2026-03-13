@@ -79,6 +79,8 @@ do
 			continue
 		fi
 		echo "$0 $ARG: Starting up $NAME..."
+		[[ -f conf/config.json ]] && chmod 600 conf/config.json
+		[[ -f conf/overrides.json ]] && chmod 600 conf/overrides.json
 		if $BINARY ; then
 			echo "$0 $ARG: $NAME started"
 		else
