@@ -1027,6 +1027,11 @@ Sort global user lists (affects admin UI ordering, default: `false`).  Experimen
 
 Use bcrypt for password hashing (default: `true`).  Please leave this enabled.
 
+### User.use_csrf
+<!-- Title: Use CSRF Tokens -->
+
+Use CSRF Tokens for extra security (default: `true`).  Please leave this enabled.
+
 ### User.mail_logger
 <!-- Title: Mail Logger -->
 
