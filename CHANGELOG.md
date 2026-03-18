@@ -1,5 +1,14 @@
 # xyOps Changelog
 
+## Version v1.0.35
+
+> March 18, 2026
+
+- [`9c14b5c`](https://github.com/pixlcore/xyops/commit/9c14b5cb4fddbbc9a81c45df3d1f7ecea7fb9b45): Version 1.0.35
+- [`d2e009c`](https://github.com/pixlcore/xyops/commit/d2e009c42baece575df17fba4976034f292b023f): UI Improvement: Add visual group separators for sorted event table, for specific columns (e.g. category, tags, plugin, targets).
+- [`21813d0`](https://github.com/pixlcore/xyops/commit/21813d00dbaef433b6e75715ca34989e1c2443ed): UI Tweak: Improve icons for linked events and workflows, to show arrow pointing right (more clear).
+- [`52077cc`](https://github.com/pixlcore/xyops/commit/52077ccc6f8bbe1106e5dac899afa246d24669b2): Bug Fix: Export dialog was broken for workflows.  Fixes #208.
+
 ## Version v1.0.34
 
 > March 18, 2026
