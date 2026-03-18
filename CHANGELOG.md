@@ -1,5 +1,15 @@
 # xyOps Changelog
 
+## Version v1.0.33
+
+> March 17, 2026
+
+- [`87b4d5e`](https://github.com/pixlcore/xyops/commit/87b4d5e18b53e0aae4b2b10c31a6ee8e348caf74): Version 1.0.33
+- [`132f030`](https://github.com/pixlcore/xyops/commit/132f0306272fea0fdab76cf888b803a637b719d7): Server UI: Several visual changes to better denote server groups, and if they were manually or auto-assigned.
+- [`160d354`](https://github.com/pixlcore/xyops/commit/160d354446d65b97d362d59389c102e5a88e8e45): Server Groups: Correctly handle the case when a group is deleted with servers that had manually assigned the group.
+- [`dded76f`](https://github.com/pixlcore/xyops/commit/dded76f72c71e9280d12a3a28267fb56b6df4b1b): Unbase Config: Add missing autoGroup column index
+- [`887e100`](https://github.com/pixlcore/xyops/commit/887e100b1bf208374257b8d0b0c208256e2ebb3d): UI Fix: Show correct "All"/"None" word when group list is empty (alerts / monitors match "All" if none assigned, servers do not).
+
 ## Version v1.0.32
 
 > March 17, 2026
