@@ -570,12 +570,12 @@ See [Air-Gapped Mode](hosting.md#air-gapped-mode) for more details.
 
 This boolean enables outbound network egress controls for server-initiated HTTP(S) requests (default: `false`).
 
-### airgap.outbound_whitelist
+### airgap.whitelist
 <!-- Title: Outbound Whitelist -->
 
 This array of CIDRs/hosts defines destinations explicitly allowed for outbound requests (default includes local/private networks); when enabled, only these are permitted.
 
-### airgap.outbound_blacklist
+### airgap.blacklist
 <!-- Title: Outbound Blacklist -->
 
 This array of CIDRs/hosts defines destinations that are always blocked for outbound requests.

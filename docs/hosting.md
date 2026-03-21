@@ -604,12 +604,12 @@ To configure air-gapped mode, use the [airgap](config.md#airgap) section in the 
 ```json
 "airgap": {
 	"enabled": false,
-	"outbound_whitelist": ["127.0.0.1", "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "::1/128", "fd00::/8", "169.254.0.0/16", "fe80::/10"],
-	"outbound_blacklist": []
+	"whitelist": ["127.0.0.1", "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "::1/128", "fd00::/8", "169.254.0.0/16", "fe80::/10"],
+	"blacklist": []
 }
 ```
 
-Set the `enabled` property to `true` to enable air-gapped mode, and set the `outbound_whitelist` and/or `outbound_blacklist` arrays to IP addresses or [CIDR blocks](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing).  The default whitelist includes all IPs in the [private range](https://en.wikipedia.org/wiki/Private_network).
+Set the `enabled` property to `true` to enable air-gapped mode, and set the `whitelist` and/or `blacklist` arrays to IP addresses or [CIDR blocks](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing).  The default whitelist includes all IPs in the [private range](https://en.wikipedia.org/wiki/Private_network).
 
 The air-gapped rules apply to both xyOps itself, and automatically propagate to all connected worker servers, to govern things like the [HTTP Plugin](plugins.md#http-request-plugin).  However, it is important to point out that they do **not** govern your own Plugin code, your own shell scripts, nor marketplace Plugins.
 
