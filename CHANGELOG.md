@@ -1,5 +1,24 @@
 # xyOps Changelog
 
+## Version v1.0.39
+
+> March 23, 2026
+
+- [`6a58a69`](https://github.com/pixlcore/xyops/commit/6a58a69ffe4fa6fbda2b6a26ad98dc885acdd508): Version 1.0.39
+- [`f5cd953`](https://github.com/pixlcore/xyops/commit/f5cd9536f2926fe625009a33b0830f2b5202c7e9): Server Notifications: Improve notification text for server add/remove activity.
+- [`96c4284`](https://github.com/pixlcore/xyops/commit/96c428493754f890efc0ed68e35c99cd34ad0408): Docs: Add ToS and Privacy Policy.
+- [`0b085a0`](https://github.com/pixlcore/xyops/commit/0b085a08f337665f278e1ce669daa483a5fd7e3c): Security Hardening: Redact secrets from web hook detail output log (best effort).
+- [`45190da`](https://github.com/pixlcore/xyops/commit/45190dabe44cf75ec181cb8cb0596634db379be2): Bug Fix: UI crash in getWFParamPreviewHTML for omitted optional number param values.  Ref #175.
+- [`25d22eb`](https://github.com/pixlcore/xyops/commit/25d22eb7d53bc678421bd9802287cf8dc5ed4b16): Add THREAT_MODEL.md file for security audits.
+- [`b7756cc`](https://github.com/pixlcore/xyops/commit/b7756ccf64b00e66b846690bb2d89d3cb1030146): Typo fix in docs and sample config: outbound_blacklist and outbound_whitelist should be blacklist and whitelist, in the airgap config.
+- [`b68995d`](https://github.com/pixlcore/xyops/commit/b68995d821e8633fc6e2ff2c91e2ac1745ee664c): Security Hardening: Secrets API: Ensure secret key names don't match any bad strings (i.e. __proto__ and the like).
+- [`0be3cc7`](https://github.com/pixlcore/xyops/commit/0be3cc7094f4878224157b3a96a7295be2142985): Security Hardening: API handler: Disallow any params matching bad key names (i.e. __proto__ and the like).
+- [`4a7ec2f`](https://github.com/pixlcore/xyops/commit/4a7ec2f54f76929c4707f6efe1dac5f0a2ddf115): Security Hardening: Remove macro substitution support from system hook shell exec command (was undocumented anyway).
+- [`f6db695`](https://github.com/pixlcore/xyops/commit/f6db695942c690cce9990416994074c0a1911c50): Security Hardening: Lock down more built-in plugin fields to administrator-only (HTTP URL, Docker Run Command, etc.).
+- [`bf41044`](https://github.com/pixlcore/xyops/commit/bf41044ac8f5fb350a19b5fabae0e7579bbfac75): Security Hardening: Check secret variable key names for illegal strings (i.e. __proto__ and the like).
+- [`eb23ba4`](https://github.com/pixlcore/xyops/commit/eb23ba4c5e64f9cf7d332c0297bf331e544b829f): Security Hardening: Increase default secret key length to 32 chars in container-start.sh
+- [`08f6ed0`](https://github.com/pixlcore/xyops/commit/08f6ed0345a2197f626761fede30d381221d9bb6): api_get_latest_monitor_data: Allow both GET and POST parameters.  Fixes #214.
+
 ## Version v1.0.38
 
 > March 19, 2026
