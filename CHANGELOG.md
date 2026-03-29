@@ -1,5 +1,18 @@
 # xyOps Changelog
 
+## Version v1.0.42
+
+> March 29, 2026
+
+- [`ffb1e45`](https://github.com/pixlcore/xyops/commit/ffb1e457c99f4fdc96d989d115adb39125e2cfe6): Version 1.0.42
+	- Remove `jimp` dependency, replace with in-house developed `pixl-resize` module.
+- [`df05634`](https://github.com/pixlcore/xyops/commit/df05634e8e9367504596b16e24ebb64afbeff8c3): Config Editor: Perform basic validation pass on save.  Fixes #224.
+- [`d6dc208`](https://github.com/pixlcore/xyops/commit/d6dc208005e48a5c1897f24004cc1db096699aa1): Config Doc: Add note about leaving storage transactions enabled.
+- [`db9ba58`](https://github.com/pixlcore/xyops/commit/db9ba584dbbbd855fa529b7a63f678675f84e1bd): Bug Fix: Magic Link: After creation, if user goes back into edit trigger dialog without saving first, magic link key is regenerated.
+- [`fe22a26`](https://github.com/pixlcore/xyops/commit/fe22a26ee22188456d3a46e37bab03c48a331374): Config Doc: Document the satellite docker image path.
+- [`db4d97b`](https://github.com/pixlcore/xyops/commit/db4d97b5dcd463f267c87675ecd84bbe4f68e4f7): Bug Fix: Crasher in monitoring subsystem when storage transactions are disabled.  Fixes #220.
+- [`460ed0b`](https://github.com/pixlcore/xyops/commit/460ed0b3e73a439450f371d869f2fd2863394f3a): Cleanup: Remove unused avatar code in admin path.
+
 ## Version v1.0.41
 
 > March 27, 2026
