@@ -5442,7 +5442,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		
 		// collect plugin toolset params that have at least one required sub-field
 		var run_plugin_params = [];
-		var plugin = event.plugin_id ? find_object(app.plugins, { id: event.plugin_id }) : null;
+		var plugin = event.plugin ? find_object(app.plugins, { id: event.plugin }) : null;
 		if (plugin && plugin.params) {
 			plugin.params.forEach(function(param) {
 				if (param.type != 'toolset') return;
