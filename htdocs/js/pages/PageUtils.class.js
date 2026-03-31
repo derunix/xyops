@@ -4886,8 +4886,13 @@ Page.PageUtils = class PageUtils extends Page.Base {
 				// type
 				if (!field.type || !field.type.length) { err_msg = `Tool '${tool.id}' field '${field.id}' is missing a type.`; is_valid = false; return; }
 				if (typeof(field.type) != 'string') { err_msg = `Tool '${tool.id}' field '${field.id}' type is not a string.`; is_valid = false; return; }
-				if (!field.type.match(/^(checkbox|code|json|hidden|select|text|textarea)$/)) { err_msg = `Tool '${tool.id}' field '${field.id}' type is invalid.`; is_valid = false; return; }
-				
+				if (!field.type.match(/^(checkbox|code|json|hidden|select|bucket|text|textarea)$/)) { err_msg = `Tool '${tool.id}' field '${field.id}' type is invalid.`; is_valid = false; return; }
+
+				// bucket_id (required for bucket type)
+				if (field.type == 'bucket') {
+					if (!field.bucket_id || typeof(field.bucket_id) != 'string') { err_msg = `Tool '${tool.id}' field '${field.id}' is missing a bucket_id.`; is_valid = false; return; }
+				}
+
 				// variant
 				if ((field.type == 'text') && field.variant) {
 					if (typeof(field.variant) != 'string') { err_msg = `Tool '${tool.id}' field '${field.id}' variant is not a string.`; is_valid = false; return; }
