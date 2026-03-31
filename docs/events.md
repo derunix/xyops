@@ -146,6 +146,7 @@ Event actions combine with category defaults and universal actions. See [Actions
 To allow on-demand runs from the UI or API, include an enabled `manual` trigger on the event. When launching manually:
 
 - Any `fields` defined on the event are presented as a UI form, and their values are merged into `params`.
+- If the event's Plugin has [Toolset](plugins.md#toolset) parameters with sub-fields, the toolset is also presented in the run dialog, allowing the user to select which tool to use and fill in the sub-field values.  The selected tool ID and sub-field values are flattened into `params`.
 - The UI/API may attach uploaded files; these become `input.files`. Arbitrary JSON may be provided as `input.data` when testing.
 - Non-admin users must satisfy any locked/required parameters defined by the plugin or event fields; the system enforces these and applies defaults.
 

@@ -2627,17 +2627,16 @@ Page.PageUtils = class PageUtils extends Page.Base {
 				break;
 				
 				case 'bucket':
-					var bucket = find_object( app.buckets, { id: param.bucket_id } );
-					if (bucket) {
+					if (param.bucket_id) {
 						elem_value = (param.id in params) ? params[param.id] : '';
-						var menu_opts = self.getBucketMenuItems(bucket.id, param.bucket_path, elem_id, elem_value);
+						var menu_opts = self.getBucketMenuItems(param.bucket_id, param.bucket_path, elem_id, elem_value);
 						html += self.getFormMenu({ id: elem_id, value: elem_value, options: menu_opts, disabled: elem_dis });
 					}
 					else {
 						html += self.getFormMenu({ id: elem_id, value: '', options: [ { id: '', title: "(Bucket Not Found)" } ], disabled: elem_dis });
 					}
 				break;
-				
+
 				case 'toolset':
 					var data = param.data || { tools: [] };
 					if (!data.tools) data.tools = [];
@@ -2731,7 +2730,31 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		
 		$fieldset.html(html).buttonize();
 	}
-	
+
+	changeUserParamTool(param_id, explore = false) {
+		// change tool in user-field toolset (run dialog), redraw sub-fields
+		var elem_id = 'fe_uf_' + CSS.escape(param_id);
+		var elem_value = $('#' + elem_id).val();
+		var ts_raw = $('#fe_uf_ts_' + CSS.escape(param_id)).val();
+		if (!ts_raw) return;
+
+		var data;
+		try { data = JSON.parse(decodeURIComponent(ts_raw)); } catch(e) { return; }
+
+		var tools = data.tools || [];
+		var tool = find_object( tools, { id: elem_value } );
+		if (!tool) return;
+
+		var $fieldset = $(`#fs_uf_toolset_${CSS.escape(param_id)}`);
+		var html = '';
+
+		html += `<legend>${strip_html(tool.title)}</legend>`;
+		html += `<div class="tool_desc">${strip_html(tool.description)}</div>`;
+		if (tool.fields && tool.fields.length) html += this.getParamEditor(tool.fields, {}, explore);
+
+		$fieldset.html(html).buttonize();
+	}
+
 	viewPluginParamCode(plugin_id, param_id) {
 		// show plugin param code (no editing)
 		var elem_id = 'fe_pp_' + plugin_id + '_' + CSS.escape(param_id);
@@ -4446,7 +4469,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		var old_param = param;
 		
 		// prepare control type menu
-		var ctypes = (this.controlTypes || ['checkbox', 'code', 'json', 'hidden', 'select', 'bucket', 'text', 'textarea']).map (function(key) { 
+		var ctypes = (this.controlTypes || ['checkbox', 'code', 'json', 'hidden', 'select', 'bucket', 'text', 'textarea', 'toolset']).map (function(key) {
 			return { 
 				id: key, 
 				title: config.ui.control_type_labels[key],
@@ -4886,8 +4909,13 @@ Page.PageUtils = class PageUtils extends Page.Base {
 				// type
 				if (!field.type || !field.type.length) { err_msg = `Tool '${tool.id}' field '${field.id}' is missing a type.`; is_valid = false; return; }
 				if (typeof(field.type) != 'string') { err_msg = `Tool '${tool.id}' field '${field.id}' type is not a string.`; is_valid = false; return; }
-				if (!field.type.match(/^(checkbox|code|json|hidden|select|text|textarea)$/)) { err_msg = `Tool '${tool.id}' field '${field.id}' type is invalid.`; is_valid = false; return; }
-				
+				if (!field.type.match(/^(checkbox|code|json|hidden|select|bucket|text|textarea)$/)) { err_msg = `Tool '${tool.id}' field '${field.id}' type is invalid.`; is_valid = false; return; }
+
+				// bucket_id (required for bucket type)
+				if (field.type == 'bucket') {
+					if (!field.bucket_id || typeof(field.bucket_id) != 'string') { err_msg = `Tool '${tool.id}' field '${field.id}' is missing a bucket_id.`; is_valid = false; return; }
+				}
+
 				// variant
 				if ((field.type == 'text') && field.variant) {
 					if (typeof(field.variant) != 'string') { err_msg = `Tool '${tool.id}' field '${field.id}' variant is not a string.`; is_valid = false; return; }
@@ -5032,19 +5060,43 @@ Page.PageUtils = class PageUtils extends Page.Base {
 				break;
 				
 				case 'bucket':
-					var bucket = find_object( app.buckets, { id: param.bucket_id } );
-					if (bucket) {
+					if (param.bucket_id) {
 						elem_value = (param.id in params) ? params[param.id] : '';
-						var menu_opts = self.getBucketMenuItems(bucket.id, param.bucket_path, elem_id, elem_value);
+						var menu_opts = self.getBucketMenuItems(param.bucket_id, param.bucket_path, elem_id, elem_value);
 						html += self.getFormMenu({ id: elem_id, value: elem_value, options: menu_opts, disabled: elem_dis });
 					}
 					else {
 						html += self.getFormMenu({ id: elem_id, value: '', options: [ { id: '', title: "(Bucket Not Found)" } ], disabled: elem_dis });
 					}
 				break;
-				
+
+				case 'toolset':
+					var ts_data = param.data || { tools: [] };
+					if (!ts_data.tools) ts_data.tools = [];
+					var ts_tools = ts_data.tools;
+					if (!ts_tools.length) {
+						ts_tools.push( { id: '', title: 'No Tools', description: 'No tools defined in toolset.', fields: [] } );
+						elem_dis = true;
+					}
+
+					var ts_default = ts_data.default || ts_tools[0].id;
+					elem_value = (param.id in params) ? params[param.id] : ts_default;
+
+					var ts_tool = find_object( ts_tools, { id: elem_value } );
+					if (!ts_tool) { ts_tool = ts_tools[0]; elem_value = ts_tool.id; }
+
+					html += `<input type="hidden" id="fe_uf_ts_${CSS.escape(param.id)}" value="${encodeURIComponent(JSON.stringify(ts_data))}">`;
+html += self.getFormMenu({ id: elem_id, value: elem_value, options: ts_tools, disabled: elem_dis, onChange: `$P().changeUserParamTool('${param.id}',${explore})` });
+
+					html += `<fieldset id="fs_uf_toolset_${CSS.escape(param.id)}" class="info_fieldset">`;
+					html += `<legend>${strip_html(ts_tool.title)}</legend>`;
+					html += `<div class="tool_desc">${strip_html(ts_tool.description)}</div>`;
+					if (ts_tool.fields && ts_tool.fields.length) html += self.getParamEditor(ts_tool.fields, params, explore);
+					html += `</fieldset>`;
+				break;
+
 			} // switch type
-			
+
 			if (param.caption) html += '<div class="info_caption">' + inline_marked( strip_html(param.caption) ) + '</div>';
 			else if (elem_dis) html += '<div class="info_caption">This field is locked, and only editable by administrators.</div>';
 			
@@ -5087,13 +5139,26 @@ Page.PageUtils = class PageUtils extends Page.Base {
 	
 	getParamValues(fields, validate = true) {
 		// get all values for params hash
+		var self = this;
 		var params = {};
 		var is_valid = true;
 		if (!fields || !fields.length) return {}; // none defined
-		
+
 		fields.forEach( function(param) {
 			if (param.type == 'hidden') params[ param.id ] = param.value;
 			else if (param.type == 'checkbox') params[ param.id ] = !!$('#fe_uf_' + CSS.escape(param.id)).is(':checked');
+			else if (param.type == 'toolset') {
+				var tool_id = params[ param.id ] = $('#fe_uf_' + CSS.escape(param.id)).val();
+				var ts_raw = $('#fe_uf_ts_' + CSS.escape(param.id)).val();
+				if (!ts_raw) return;
+				var ts_data;
+				try { ts_data = JSON.parse(decodeURIComponent(ts_raw)); } catch(e) { return; }
+				var tool = find_object( ts_data.tools || [], { id: tool_id } );
+				if (!tool) return;
+				var tool_values = self.getParamValues(tool.fields || []);
+				if (!tool_values) { is_valid = false; return; }
+				merge_hash_into( params, tool_values );
+			}
 			else {
 				params[ param.id ] = $('#fe_uf_' + CSS.escape(param.id)).val();
 				if (param.required && !params[ param.id ].length && validate) {
@@ -5374,21 +5439,40 @@ Page.PageUtils = class PageUtils extends Page.Base {
 			})
 		});
 		
+		// collect plugin toolset params that have at least one required sub-field
+		var run_plugin_params = [];
+		var plugin = event.plugin ? find_object(app.plugins, { id: event.plugin }) : null;
+		if (plugin && plugin.params) {
+			plugin.params.forEach(function(param) {
+				if (param.type != 'toolset') return;
+				if (param.locked && !app.isAdmin()) return;
+				var tools = (param.data && param.data.tools) ? param.data.tools : [];
+				var has_required = tools.some(function(tool) {
+					return (tool.fields || []).some(function(f) { return f.required; });
+				});
+				if (has_required) run_plugin_params.push(param);
+			});
+		}
+
+		// combine event user fields with required plugin toolset params
+		var all_run_fields = (event.fields || []).concat(run_plugin_params);
+		var saved_params = event.params || {};
+
 		// user form fields
 		html += this.getFormRow({
 			label: 'User Parameters:',
-			content: '<div class="plugin_param_editor_cont">' + this.getParamEditor(event.fields, {}) + '</div>',
+			content: '<div class="plugin_param_editor_cont">' + this.getParamEditor(all_run_fields, saved_params) + '</div>',
 			// caption: 'Enter values for all the event-defined parameters here.'
 		});
-		
+
 		html += '</div>';
 		Dialog.confirm( title, html, btn, function(result) {
 			if (!result) return;
 			app.clearError();
-			
-			var fields = self.getParamValues(event.fields || []);
+
+			var fields = self.getParamValues(all_run_fields);
 			if (!fields) return; // validation error
-			
+
 			var job = deep_copy_object(event);
 			if (!job.params) job.params = {};
 			merge_hash_into( job.params, fields );

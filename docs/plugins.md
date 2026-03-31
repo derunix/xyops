@@ -1095,6 +1095,66 @@ In this fictional example, the toolset menu would show two tools: "Upload Files"
 
 Note that when all the parameter values are collected from the user, they are "flattened" into a single-level object.
 
+#### Bucket Menus in Toolsets
+
+Toolset sub-fields support the `bucket` type, which dynamically loads menu items from a [Storage Bucket](buckets.md).  To use a bucket menu inside a toolset, set the field `type` to `bucket`, and include a `bucket_id` property pointing to the target bucket, and an optional `bucket_path` for the data path within the bucket.  Here is an example:
+
+```json
+{
+	"tools": [
+		{
+			"id": "americas",
+			"title": "Americas",
+			"description": "Select a country in the Americas",
+			"fields": [
+				{
+					"id": "country",
+					"title": "Country",
+					"type": "bucket",
+					"bucket_id": "YOUR_BUCKET_ID",
+					"bucket_path": "countries_americas",
+					"value": "",
+					"required": true,
+					"caption": "Select the target country."
+				}
+			]
+		},
+		{
+			"id": "europe",
+			"title": "Europe",
+			"description": "Select a country in Europe",
+			"fields": [
+				{
+					"id": "country",
+					"title": "Country",
+					"type": "bucket",
+					"bucket_id": "YOUR_BUCKET_ID",
+					"bucket_path": "countries_europe",
+					"value": "",
+					"required": true,
+					"caption": "Select the target country."
+				}
+			]
+		}
+	]
+}
+```
+
+In this example, each tool loads a different list of countries from the same storage bucket, but using a different `bucket_path`.  The bucket JSON might look like:
+
+```json
+{
+	"countries_americas": ["United States", "Canada", "Mexico", "Brazil"],
+	"countries_europe": ["United Kingdom", "France", "Germany", "Spain"]
+}
+```
+
+The supported sub-field types inside a toolset are: `text`, `textarea`, `code`, `json`, `select`, `bucket`, `checkbox`, and `hidden`.
+
+#### Toolsets in the Run Dialog
+
+When a toolset parameter contains sub-fields, the toolset is automatically presented to users in the **Run Event** dialog.  This allows users to select which tool to use and fill in the sub-field values at run time, without requiring admin access to the event configuration.  The selected tool and its sub-field values are merged into `job.params` when the job launches.
+
 ## Macro Expansion
 
 All Plugin Parameter string values support inline macro expansion using the common `{{ mustache }}` syntax.  Using this feature you can dynamically insert values into parameters from arbitrary data passed into the job from a previous job (connected workflow node or launched by action).  Here is how it works.  Imagine that a previous job completes, and outputs the following data:
@@ -1119,6 +1179,12 @@ My favorite animal is {{ data.animal }}, and my favorite color is {{ data.color 
 When the job runs, those `{{ mustache }}` placeholders are automatically expanded using the [Job](data.md#job) object as the context.  In addition, the [Job.input](data.md#job-input) sub-object is "flattened" into the outer context for convenience (just so you can skip the `input` prefix in the macros).  This allows you to access all the output data from the previous job in the current job, and copy it into Plugin parameters.
 
 The mustache macros can do more than just data lookups.  They can also evaluate simple JavaScript-style expressions as well.  For more on this, see [xyOps Expression Syntax](xyexp.md).
+
+### Re-expansion After Start Actions
+
+Macro templates (`{{ }}` placeholders) in Plugin parameters are expanded twice: once at job creation time, and again just before the job is launched on the remote server, after all [Start Actions](actions.md) have completed.  This is important when using start actions like **Fetch Bucket** or **Run Event**, which may populate `input.data` after the initial expansion.
+
+For example, if a start action fetches data from a storage bucket and places it in `input.data.server_list`, a parameter value like `{{ data.server_list }}` will correctly resolve after the start action runs -- even though `input.data` was empty at initial expansion time.
 
 ## Built-in Plugins
 
