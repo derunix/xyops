@@ -2733,21 +2733,23 @@ Page.PageUtils = class PageUtils extends Page.Base {
 
 	changeUserParamTool(param_id, explore = false) {
 		// change tool in user-field toolset (run dialog), redraw sub-fields
-		console.log('changeUserParamTool called:', param_id, explore);
 		var elem_id = 'fe_uf_' + CSS.escape(param_id);
 		var elem_value = $('#' + elem_id).val();
-
 		var ts_raw = $('#fe_uf_ts_' + CSS.escape(param_id)).val();
-		if (!ts_raw) return;
+		console.log('changeUserParamTool debug:', { param_id, elem_id, elem_value, ts_raw_len: ts_raw ? ts_raw.length : 0 });
+
+		if (!ts_raw) { console.log('changeUserParamTool: no ts_raw, abort'); return; }
 
 		var data;
-		try { data = JSON.parse(ts_raw); } catch(e) { return; }
+		try { data = JSON.parse(ts_raw); } catch(e) { console.log('changeUserParamTool: JSON parse error', e); return; }
 
 		var tools = data.tools || [];
 		var tool = find_object( tools, { id: elem_value } );
-		if (!tool) return;
+		console.log('changeUserParamTool: tool_ids=', tools.map(function(t){return t.id}), 'selected=', elem_value, 'found=', !!tool);
+		if (!tool) { console.log('changeUserParamTool: tool not found, abort'); return; }
 
 		var $fieldset = $(`#fs_uf_toolset_${CSS.escape(param_id)}`);
+		console.log('changeUserParamTool: fieldset found=', $fieldset.length);
 		var html = '';
 
 		html += `<legend>${strip_html(tool.title)}</legend>`;
@@ -2755,6 +2757,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		if (tool.fields && tool.fields.length) html += this.getParamEditor(tool.fields, {}, explore);
 
 		$fieldset.html(html).buttonize();
+		console.log('changeUserParamTool: done, fieldset updated');
 	}
 
 	viewPluginParamCode(plugin_id, param_id) {
