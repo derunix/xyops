@@ -2733,6 +2733,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 
 	changeUserParamTool(param_id, explore = false) {
 		// change tool in user-field toolset (run dialog), redraw sub-fields
+		console.log('changeUserParamTool called:', param_id, explore);
 		var elem_id = 'fe_uf_' + CSS.escape(param_id);
 		var elem_value = $('#' + elem_id).val();
 
