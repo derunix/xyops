@@ -5440,21 +5440,40 @@ Page.PageUtils = class PageUtils extends Page.Base {
 			})
 		});
 		
+		// collect plugin toolset params that have at least one required sub-field
+		var run_plugin_params = [];
+		var plugin = event.plugin_id ? find_object(app.plugins, { id: event.plugin_id }) : null;
+		if (plugin && plugin.params) {
+			plugin.params.forEach(function(param) {
+				if (param.type != 'toolset') return;
+				if (param.locked && !app.isAdmin()) return;
+				var tools = (param.data && param.data.tools) ? param.data.tools : [];
+				var has_required = tools.some(function(tool) {
+					return (tool.fields || []).some(function(f) { return f.required; });
+				});
+				if (has_required) run_plugin_params.push(param);
+			});
+		}
+
+		// combine event user fields with required plugin toolset params
+		var all_run_fields = (event.fields || []).concat(run_plugin_params);
+		var saved_params = event.params || {};
+
 		// user form fields
 		html += this.getFormRow({
 			label: 'User Parameters:',
-			content: '<div class="plugin_param_editor_cont">' + this.getParamEditor(event.fields, {}) + '</div>',
+			content: '<div class="plugin_param_editor_cont">' + this.getParamEditor(all_run_fields, saved_params) + '</div>',
 			// caption: 'Enter values for all the event-defined parameters here.'
 		});
-		
+
 		html += '</div>';
 		Dialog.confirm( title, html, btn, function(result) {
 			if (!result) return;
 			app.clearError();
-			
-			var fields = self.getParamValues(event.fields || []);
+
+			var fields = self.getParamValues(all_run_fields);
 			if (!fields) return; // validation error
-			
+
 			var job = deep_copy_object(event);
 			if (!job.params) job.params = {};
 			merge_hash_into( job.params, fields );
