@@ -1,5 +1,13 @@
 # xyOps Changelog
 
+## Unreleased
+
+- Feature: Toolset parameters now support `bucket` sub-field type, allowing dynamic dropdown menus inside toolsets that are populated from [Storage Buckets](docs/buckets.md).
+- Feature: Toolset parameters are now presented in the **Run Event** dialog, allowing users to select tools and fill in sub-field values at run time.
+- Feature: Param template re-expansion after start actions -- `{{ }}` macros in Plugin parameters are now expanded a second time after start actions complete, so templates can reference data populated by start actions (e.g. Fetch Bucket).
+- Bug Fix: Bucket dropdown inside toolset no longer shows "(Bucket Not Found)" when the bucket was created after page load.
+- Bug Fix: Docker hostname collision causing masters.json duplicate detection and shutdown.
+
 ## Version v1.0.42
 
 > March 29, 2026
