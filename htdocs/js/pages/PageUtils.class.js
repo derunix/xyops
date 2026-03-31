@@ -2736,20 +2736,16 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		var elem_id = 'fe_uf_' + CSS.escape(param_id);
 		var elem_value = $('#' + elem_id).val();
 		var ts_raw = $('#fe_uf_ts_' + CSS.escape(param_id)).val();
-		console.log('changeUserParamTool debug:', { param_id, elem_id, elem_value, ts_raw_len: ts_raw ? ts_raw.length : 0 });
-
-		if (!ts_raw) { console.log('changeUserParamTool: no ts_raw, abort'); return; }
+		if (!ts_raw) return;
 
 		var data;
-		try { data = JSON.parse(ts_raw); } catch(e) { console.log('changeUserParamTool: JSON parse error', e); return; }
+		try { data = JSON.parse(decodeURIComponent(ts_raw)); } catch(e) { return; }
 
 		var tools = data.tools || [];
 		var tool = find_object( tools, { id: elem_value } );
-		console.log('changeUserParamTool: tool_ids=', tools.map(function(t){return t.id}), 'selected=', elem_value, 'found=', !!tool);
-		if (!tool) { console.log('changeUserParamTool: tool not found, abort'); return; }
+		if (!tool) return;
 
 		var $fieldset = $(`#fs_uf_toolset_${CSS.escape(param_id)}`);
-		console.log('changeUserParamTool: fieldset found=', $fieldset.length);
 		var html = '';
 
 		html += `<legend>${strip_html(tool.title)}</legend>`;
@@ -2757,7 +2753,6 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		if (tool.fields && tool.fields.length) html += this.getParamEditor(tool.fields, {}, explore);
 
 		$fieldset.html(html).buttonize();
-		console.log('changeUserParamTool: done, fieldset updated');
 	}
 
 	viewPluginParamCode(plugin_id, param_id) {
@@ -5090,8 +5085,8 @@ Page.PageUtils = class PageUtils extends Page.Base {
 					var ts_tool = find_object( ts_tools, { id: elem_value } );
 					if (!ts_tool) { ts_tool = ts_tools[0]; elem_value = ts_tool.id; }
 
-					html += `<input type="hidden" id="fe_uf_ts_${CSS.escape(param.id)}" value="${encode_entities(JSON.stringify(ts_data))}">`;
-					html += self.getFormMenu({ id: elem_id, value: elem_value, options: ts_tools, disabled: elem_dis, onChange: `$P().changeUserParamTool('${param.id}',${explore})` });
+					html += `<input type="hidden" id="fe_uf_ts_${CSS.escape(param.id)}" value="${encodeURIComponent(JSON.stringify(ts_data))}">`;
+html += self.getFormMenu({ id: elem_id, value: elem_value, options: ts_tools, disabled: elem_dis, onChange: `$P().changeUserParamTool('${param.id}',${explore})` });
 
 					html += `<fieldset id="fs_uf_toolset_${CSS.escape(param.id)}" class="info_fieldset">`;
 					html += `<legend>${strip_html(ts_tool.title)}</legend>`;
@@ -5157,7 +5152,7 @@ Page.PageUtils = class PageUtils extends Page.Base {
 				var ts_raw = $('#fe_uf_ts_' + CSS.escape(param.id)).val();
 				if (!ts_raw) return;
 				var ts_data;
-				try { ts_data = JSON.parse(ts_raw); } catch(e) { return; }
+				try { ts_data = JSON.parse(decodeURIComponent(ts_raw)); } catch(e) { return; }
 				var tool = find_object( ts_data.tools || [], { id: tool_id } );
 				if (!tool) return;
 				var tool_values = self.getParamValues(tool.fields || []);
@@ -5447,7 +5442,6 @@ Page.PageUtils = class PageUtils extends Page.Base {
 		// collect plugin toolset params that have at least one required sub-field
 		var run_plugin_params = [];
 		var plugin = event.plugin ? find_object(app.plugins, { id: event.plugin }) : null;
-		console.log('doRunEvent debug:', { event_plugin: event.plugin, plugin_found: !!plugin, plugin_params: plugin ? plugin.params : null });
 		if (plugin && plugin.params) {
 			plugin.params.forEach(function(param) {
 				if (param.type != 'toolset') return;
