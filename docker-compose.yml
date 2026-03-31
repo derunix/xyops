@@ -2,6 +2,7 @@ services:
   xyops:
     build: .
     container_name: xyops
+    hostname: xyops
     restart: unless-stopped
     ports:
       - "5522:5522"
@@ -9,7 +10,7 @@ services:
     environment:
       - XYOPS_foreground=true
       - XYOPS_color=true
-      - XYOPS_masters=localhost
+      - XYOPS_masters=xyops
       # NODE_MAX_MEMORY: 4096
     volumes:
       - /opt/xyops/data:/opt/xyops/data
